@@ -1,65 +1,62 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import { HeroVideo } from "@/components/home/hero-video";
+import { HeritageSection } from "@/components/home/heritage-section";
+import { ScrollScene } from "@/components/home/scroll-scene";
+import { TastingMarquee } from "@/components/home/tasting-marquee";
+import { CategoryShowcase } from "@/components/home/category-showcase";
+import { TonightsPick } from "@/components/home/tonights-pick";
+import { CraftStory } from "@/components/home/craft-story";
+import { DriftGallery } from "@/components/home/drift-gallery";
+import { HowItWorks } from "@/components/home/how-it-works";
+import { CallToOrder } from "@/components/home/call-to-order";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  faqSchema,
+  breadcrumbSchema,
+  localBusinessSchema,
+  speakableSchema,
+} from "@/components/seo/schemas";
+import { BRAND } from "@/lib/brand";
+import { canonical } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: `${BRAND.name} — Phone-Order Tobacconist, Open 6 AM – 11 PM`,
+  description:
+    "Call the counter for smokes, vapes and loose leaf. Delivery in 1–3 hours across Australia. Verify your age once on the site, then order by phone. 18+ only.",
+  alternates: { canonical: canonical("/") },
+  openGraph: {
+    title: `${BRAND.name} — Phone-Order Tobacconist`,
+    description:
+      "Smokes, vapes and loose leaf to your door before the kettle boils. 6 AM – 11 PM · 1–3 hour delivery.",
+    url: canonical("/"),
+  },
+};
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      {/* FAQPage + BreadcrumbList + LocalBusiness + Speakable for answer-engine
+          + rich-result surfaces. All facts mirror the visible copy in
+          HowItWorks + CallToOrder + Footer. Speakable CSS selectors point to
+          [data-speakable] anchors rendered by HowItWorks + CallToOrder. */}
+      <JsonLd id="ld-home-faq" data={faqSchema()} />
+      <JsonLd id="ld-home-localbusiness" data={localBusinessSchema()} />
+      <JsonLd id="ld-home-speakable" data={speakableSchema()} />
+      <JsonLd
+        id="ld-home-crumbs"
+        data={breadcrumbSchema([{ name: "Home", path: "/" }])}
+      />
+
+      <HeroVideo />
+      <HeritageSection />
+      <ScrollScene />
+      <TastingMarquee />
+      <CategoryShowcase />
+      <TonightsPick />
+      <CraftStory />
+      <DriftGallery />
+      <HowItWorks />
+      <CallToOrder />
+    </>
   );
 }

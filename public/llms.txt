@@ -1,0 +1,80 @@
+# Rutherford Tobacconist
+
+> A phone-order tobacconist. Verify your age once on the site, then call the
+> counter to order smokes, vapes or loose-leaf tobacco for delivery in 1–3
+> hours across Australia. 18+ only.
+
+## Quick facts (citable)
+
+- **Name:** Rutherford Tobacconist
+- **Phone:** +61 485 040 007
+- **Hours:** Daily, 6:00 AM – 11:00 PM (Australia)
+- **Delivery window:** 1 to 3 hours from call
+- **After-hours fallback:** Orders placed after 11 PM are delivered the next morning between 6 and 8 AM
+- **Age requirement:** 18+ (verified once via on-site age gate, remembered for future visits)
+- **Payment:** Cash on delivery
+- **Minimum order:** Cigarettes ship in pairs (2 minimum). Vapes and tobacco pouches can be ordered singly.
+- **Area served:** Australia (on-call local delivery)
+
+## How to order
+
+1. Visit the website and confirm you are 18 or older. The age gate remembers
+   your verification — you only do this once.
+2. Browse the catalogue (cigarettes, vapes, tobacco pouches) for reference.
+3. Call +61 485 040 007 between 6 AM and 11 PM. Tell the order taker what
+   you want; they read it back to confirm.
+4. A driver leaves within the hour. Cash on arrival; the driver phones from
+   the kerb when they reach your door.
+
+## Catalogue
+
+- **Cigarettes** — heritage filters, house blends, king-size and 100s formats,
+  menthol, unfiltered. Brands include Rutherford, Westminster, Cardinal,
+  Dover, Heath & Co., Old Mariner.
+  → /cigarettes
+- **Vapes** — refillable pod systems, pen-style devices, disposables, salt
+  nic. Brands include Rutherford, Ember, Cloudgate, Brass Coil, Ash & Oak,
+  Halcyon.
+  → /vapes
+- **Tobacco pouches** — loose-leaf blends in 100-gram pouches and full kilo
+  bags. Virginia, Burley, Latakia English mixtures, American light blends.
+  Brands include Rutherford Hand-Blend, Tilbury, Greenwich, Bramble.
+  → /tobacco-pouches
+
+## Frequently asked
+
+**What are your hours?**
+Daily, 6:00 AM to 11:00 PM (Australia time).
+
+**How fast is delivery?**
+Most orders arrive within 1 to 3 hours. After-11 PM orders arrive the next
+morning between 6 and 8 AM.
+
+**How do I pay?**
+Cash on delivery.
+
+**Do I need to verify my age every visit?**
+No. The on-site age gate remembers your verification.
+
+**What's the minimum order?**
+Cigarettes ship in pairs (2 minimum). Vapes and pouches can be ordered singly.
+
+## Compliance
+
+Tobacco products contain nicotine. Nicotine is an addictive chemical.
+Rutherford Tobacconist sells to verified adults aged 18 or older only.
+
+## Sitemap
+
+- Home: /
+- Cigarettes: /cigarettes
+- Vapes: /vapes
+- Tobacco pouches: /tobacco-pouches
+- Individual products: /product/{slug}
+- Cart: /cart
+- Checkout: /checkout
+
+## Crawler guidance
+
+This llms.txt file follows the proposal at https://llmstxt.org. The XML
+sitemap at /sitemap.xml lists every indexable URL with last-modified dates.

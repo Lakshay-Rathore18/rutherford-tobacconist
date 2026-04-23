@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rutherford Tobacconist
 
-## Getting Started
+A premium e-commerce site for a heritage tobacconist. Old-world gentleman's-club aesthetic — deep oak, aged brass, parchment, Cinzel + Cormorant Garamond serifs.
 
-First, run the development server:
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
+npm run build        # production build (27 routes prerendered)
+npm run start        # serve the production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What's inside
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · shadcn/ui (base-ui) · Framer Motion · GSAP · Zustand (persisted) · Sonner.
+- **Catalogue:** 6 cigarettes, 6 vapes, 4 tobacco pouches (each pouch in 100g + 1kg).
+- **Routes:**
+  - `/` — landing (hero, heritage, three-drawer category showcase, craft story, seal)
+  - `/cigarettes`, `/vapes`, `/tobacco-pouches` — category pages
+  - `/product/[slug]` — product detail with variant + quantity selectors
+  - `/cart`, `/checkout`, `/order-confirmation/[id]`
+  - `/about`, `/contact`
+  - `/sitemap.xml`, `/robots.txt`
+- **Age gate:** 18+ permanent localStorage. Verified once, never re-prompted unless storage is cleared. Checkout DOB re-verify always runs (compliance teeth).
+- **Payment:** cash on delivery only (v1). No card details collected.
+- **Audit trail:** every order writes to localStorage `rt_orders` with hashed DOB. Schema is forward-compatible with a Supabase migration in v2.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project layout
 
-## Learn More
+```
+src/
+├── app/                       Next.js routes (incl. sitemap.ts, robots.ts)
+├── components/
+│   ├── ui/                    shadcn primitives (Dialog, Sheet, RadioGroup, etc.)
+│   ├── layout/                age-gate, header, footer, compliance, grain
+│   ├── home/                  hero, heritage, category showcase, craft story, seal
+│   ├── shop/                  product card, grid, detail, variant selector, tasting notes
+│   ├── cart/                  drawer, item, trigger, hydration, checkout form
+│   └── primitives/            brass divider, serif heading, motion reveal, product mark
+├── lib/                       brand, products, age-verification, cart-store, orders, motion
+├── styles/                    fonts.ts (Cinzel · Cormorant Garamond · Libre Caslon Text)
+├── types/                     domain types
+└── app/globals.css            Tailwind v4 @theme tokens, grain, vignette, brass divider, etc.
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Founder input still needed
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See [`PLACEHOLDERS.md`](./PLACEHOLDERS.md) — every `[PLACEHOLDER — founder]` marker in the codebase, by file path. Brand year, address, phone, email, hours, real product photos, and the optional hero stock video are all listed there.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Accessibility
 
-## Deploy on Vercel
+The build follows WCAG 2.2 AA. The full pattern reference is in [`docs/A11Y-BRIEF.md`](./docs/A11Y-BRIEF.md), and the post-implementation audit punch list is in [`docs/A11Y-AUDIT-LIVE.md`](./docs/A11Y-AUDIT-LIVE.md). Tested with VoiceOver, NVDA, and keyboard-only.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Compliance
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The footer carries the persistent legal line (`Tobacco products contain nicotine. Nicotine is an addictive chemical. 18+ only.`) wrapped in `<aside aria-label="Health warning">` per landmark conventions. The age gate is `<dialog>` with focus trap; the checkout form re-verifies DOB on every order and stores only a SHA-256 hash of `${dob}:${orderId}`.
+
+## Deferred to later sprints
+
+Real Supabase backend · payment processor · admin dashboard · voice agent · driver dispatch · email/SMS confirmations · multi-language · POS sync · Heygen-generated hero video.
+
+## Stop the dev server
+
+`Ctrl+C` in the terminal where `npm run dev` is running.
