@@ -141,7 +141,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <main
               id="main"
               tabIndex={-1}
-              className="flex-1 relative outline-none"
+              className="flex-1 relative outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-brass-highlight)] focus-visible:outline-offset-[-3px]"
               aria-label="Main content"
             >
               {children}

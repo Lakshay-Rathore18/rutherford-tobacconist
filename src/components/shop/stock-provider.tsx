@@ -55,6 +55,13 @@ export function StockProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    // Kick off the initial fetch on mount. `refresh()` is async — the only
+    // synchronous state update is `setLoading(true)`, which is a no-op since
+    // `useState(true)` already initializes loading to true. The remaining
+    // setState calls land inside the awaited callback, so this is the
+    // "subscribe to external system" effect shape React docs endorse, not a
+    // setState cascade. Lint rule can't see across the async boundary.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void refresh();
   }, [refresh]);
 
@@ -98,15 +105,6 @@ export function StockProvider({ children }: { children: React.ReactNode }) {
       />
     </StockContext.Provider>
   );
-}
-
-/** Full map + controls. Rare; most consumers want `useStockEntry`. */
-export function useStockMap(): StockContextValue {
-  const ctx = useContext(StockContext);
-  if (!ctx) {
-    throw new Error("useStockMap must be used inside <StockProvider>");
-  }
-  return ctx;
 }
 
 /** Per-family entry (undefined = not yet loaded or unmapped → treat as saleable). */

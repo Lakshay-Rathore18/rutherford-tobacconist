@@ -62,7 +62,7 @@ function CategoryDrawer({
     >
       <Link
         href={`/${category.slug}`}
-        className="group relative block aspect-[3/4] bg-[var(--color-oak-medium)] border border-[var(--color-brass)]/20 overflow-hidden transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] focus:outline-none focus:border-[var(--color-brass-highlight)]"
+        className="group relative block aspect-[3/4] bg-[var(--color-oak-medium)] border border-[var(--color-brass)]/20 overflow-hidden transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] focus:outline-none focus-visible:border-[var(--color-brass-highlight)] focus-visible:ring-2 focus-visible:ring-[var(--color-brass-highlight)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
       >
         {/* Brass handle on top */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 w-20 h-3 bg-[var(--color-brass)] rounded-b-md transition-all duration-500 group-hover:h-5 group-hover:w-24 group-hover:bg-[var(--color-brass-highlight)]" />

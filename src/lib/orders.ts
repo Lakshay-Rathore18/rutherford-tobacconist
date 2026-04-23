@@ -4,7 +4,7 @@ import type { OrderAudit, CartItem, DeliveryAddress, DOB, SmsStatus } from "@/ty
 import { fullNameOf } from "@/types";
 import { hashDob } from "@/lib/age-verification";
 
-const ORDERS_KEY = "rt_orders";
+export const ORDERS_KEY = "rt_orders";
 
 /**
  * Generate a human-readable order ID: RT + 5-digit zero-padded.

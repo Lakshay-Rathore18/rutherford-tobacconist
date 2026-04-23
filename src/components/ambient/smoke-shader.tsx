@@ -1,8 +1,9 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef, useMemo, useEffect, useState } from "react";
+import { useRef, useMemo, useState } from "react";
 import * as THREE from "three";
+import { useReducedMotion, useSaveData } from "@/lib/hooks";
 
 /**
  * Volumetric-looking smoke plane rendered via a fragment shader with
@@ -161,19 +162,15 @@ function SvgSmokeFallback() {
 }
 
 export function SmokeShader() {
-  const [mode, setMode] = useState<"shader" | "fallback" | null>(null);
-
-  useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Save-Data hint (if present): skip the shader
-    const conn = (navigator as unknown as { connection?: { saveData?: boolean } }).connection;
-    const saveData = conn?.saveData ?? false;
-    setMode(reducedMotion || saveData ? "fallback" : "shader");
-  }, []);
-
-  if (mode === null) {
-    return <SvgSmokeFallback />;
-  }
+  // WebGL context loss is one-shot; everything else is derived from MQ/Save-Data.
+  // SSR snapshot is `false` for both, so first server render = "shader" mode,
+  // matching the typical client. The SvgSmokeFallback always paints behind so
+  // there is no flash even if the client downgrades on first paint.
+  const [glLost, setGlLost] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const saveData = useSaveData();
+  const mode: "shader" | "fallback" =
+    glLost || reducedMotion || saveData ? "fallback" : "shader";
 
   if (mode === "fallback") {
     return <SvgSmokeFallback />;
@@ -190,7 +187,7 @@ export function SmokeShader() {
         onCreated={({ gl }) => {
           gl.domElement.addEventListener("webglcontextlost", (e) => {
             e.preventDefault();
-            setMode("fallback");
+            setGlLost(true);
           });
         }}
       >

@@ -79,7 +79,10 @@ export function Header() {
 
           <div className="flex items-center gap-2">
             <CartTrigger />
-            <MobileMenu pathname={pathname ?? ""} />
+            {/* key={pathname} resets the menu's open state on every route
+                change without a setState-in-effect. Cleaner than
+                useEffect(() => setOpen(false), [pathname]). */}
+            <MobileMenu key={pathname} pathname={pathname ?? ""} />
           </div>
         </div>
       </div>
@@ -89,12 +92,9 @@ export function Header() {
 }
 
 function MobileMenu({ pathname }: { pathname: string }) {
+  // open state only — route-change reset is handled by the parent's
+  // key={pathname} on this component (remount = fresh state).
   const [open, setOpen] = useState(false);
-
-  // Close on route change.
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

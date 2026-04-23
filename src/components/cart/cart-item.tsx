@@ -52,7 +52,7 @@ export function CartItem({ item }: { item: CartItemT }) {
             >
               {item.qty}
             </span>
-            <span className="sr-only">Current quantity {item.qty}.</span>
+            <span className="sr-only">{item.qty}.</span>
             <button
               type="button"
               onClick={() => increment(key)}

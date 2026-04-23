@@ -32,7 +32,17 @@ export class SectionBoundary extends Component<
   }
 
   render() {
-    if (this.state.failed) return null;
+    if (this.state.failed) {
+      // Silent visual fallback, but announce to assistive tech so a SR user
+      // doesn't wonder why a section "vanished" between landmarks.
+      return (
+        <div role="status" className="sr-only" aria-live="polite">
+          {this.props.name
+            ? `${this.props.name} section is currently unavailable.`
+            : "A section is currently unavailable."}
+        </div>
+      );
+    }
     return this.props.children;
   }
 }

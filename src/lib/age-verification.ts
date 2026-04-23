@@ -8,6 +8,8 @@
  *   - Checkout DOB re-verify ALWAYS runs (legal teeth + per-order audit)
  */
 
+import { notifyLocalStorageChange } from "@/lib/hooks";
+
 export const MIN_AGE = 18;
 export const STORAGE_KEY = "rt_age_verified";
 
@@ -77,6 +79,7 @@ export function setVerified(): void {
   };
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
+    notifyLocalStorageChange(STORAGE_KEY);
   } catch {
     // Quota / disabled storage — modal will simply re-appear on next visit.
   }
@@ -89,6 +92,7 @@ export function clearVerification(): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(STORAGE_KEY);
+    notifyLocalStorageChange(STORAGE_KEY);
   } catch {}
 }
 

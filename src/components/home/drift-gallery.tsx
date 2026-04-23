@@ -13,20 +13,59 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-const SLUGS = [
-  "rutherford-reserve-gold",
-  "rutherford-vapor-pod",
-  "tilbury-hall-dark",
-  "westminster-heritage",
-  "ash-oak-refillable",
+// Pull cross-category bestSellers so the gallery actually fills with stock.
+// Falls back to the first products in catalog order if too few bestSellers exist.
+const PREFERRED_ORDER: Array<(typeof PRODUCTS)[number]["category"]> = [
+  "cigarettes",
+  "vapes",
+  "nicotine-pouches",
+  "tobacco-pouches",
 ];
+
+function pickDriftTiles(limit = 5): (typeof PRODUCTS)[number][] {
+  const picked: (typeof PRODUCTS)[number][] = [];
+  const seen = new Set<string>();
+  // First pass: one bestSeller per category (round-robin through PREFERRED_ORDER)
+  for (const cat of PREFERRED_ORDER) {
+    const hit = PRODUCTS.find((p) => p.bestSeller && p.category === cat && !seen.has(p.slug));
+    if (hit) {
+      picked.push(hit);
+      seen.add(hit.slug);
+    }
+    if (picked.length >= limit) break;
+  }
+  // Second pass: fill with any remaining bestSellers
+  if (picked.length < limit) {
+    for (const p of PRODUCTS) {
+      if (picked.length >= limit) break;
+      if (p.bestSeller && !seen.has(p.slug)) {
+        picked.push(p);
+        seen.add(p.slug);
+      }
+    }
+  }
+  // Final fallback: any product to guarantee the gallery is never empty
+  if (picked.length < limit) {
+    for (const p of PRODUCTS) {
+      if (picked.length >= limit) break;
+      if (!seen.has(p.slug)) {
+        picked.push(p);
+        seen.add(p.slug);
+      }
+    }
+  }
+  return picked;
+}
+
+// Hoisted: pickDriftTiles iterates the full PRODUCTS catalog and never
+// changes between renders. Computing it once at module load avoids
+// re-running the round-robin scan on every parent re-render.
+const DRIFT_TILES = pickDriftTiles(5);
 
 export function DriftGallery() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const tiles = SLUGS.map((slug) => PRODUCTS.find((p) => p.slug === slug)).filter(
-    (p): p is (typeof PRODUCTS)[number] => Boolean(p),
-  );
+  const tiles = DRIFT_TILES;
 
   useGSAP(
     () => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { useCoarsePointer, useReducedMotion } from "@/lib/hooks";
 
 /**
  * Magnetic hover wrapper. Primary CTAs translate up to `strength` pixels
@@ -24,12 +25,13 @@ export function Magnetic({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
+  const coarse = useCoarsePointer();
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (coarse || reducedMotion) return;
 
     let raf = 0;
 
@@ -57,7 +59,7 @@ export function Magnetic({
       el.removeEventListener("mouseleave", onLeave);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [strength]);
+  }, [strength, coarse, reducedMotion]);
 
   return (
     <div

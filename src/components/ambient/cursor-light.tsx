@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useCoarsePointer, useReducedMotion } from "@/lib/hooks";
 
 /**
  * Fixed-position radial gradient that tracks the cursor.
@@ -12,13 +13,14 @@ import { useEffect, useRef } from "react";
  */
 export function CursorLight() {
   const ref = useRef<HTMLDivElement | null>(null);
+  const coarse = useCoarsePointer();
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     // Feature-gate at runtime so coarse/reduced-motion users get no listener.
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (coarse || reducedMotion) return;
 
     let raf = 0;
     let targetX = 50;
@@ -48,7 +50,7 @@ export function CursorLight() {
       window.removeEventListener("mousemove", onMove);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [coarse, reducedMotion]);
 
   return <div ref={ref} aria-hidden="true" className="cursor-light" />;
 }

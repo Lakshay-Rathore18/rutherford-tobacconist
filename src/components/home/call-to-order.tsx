@@ -152,7 +152,7 @@ export function CallToOrder() {
                 ref={numberRef}
                 href={`tel:${BRAND.phoneE164}`}
                 aria-label={`Call the Rutherford order taker on ${spokenDigits(BRAND.phone)}`}
-                className="group inline-flex items-baseline gap-3 md:gap-5 font-[family-name:var(--font-fraunces)] text-[2.4rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[6rem] leading-none tracking-[-0.02em] text-[var(--color-text-primary)] hover:text-[var(--color-accent-amber)] transition-colors duration-500 tabular-nums focus:outline-none focus-visible:outline-none"
+                className="group inline-flex items-baseline gap-3 md:gap-5 font-[family-name:var(--font-fraunces)] text-[2.4rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[6rem] leading-none tracking-[-0.02em] text-[var(--color-text-primary)] hover:text-[var(--color-accent-amber)] transition-colors duration-500 tabular-nums focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--color-accent-amber)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-bg-primary)] rounded-sm"
                 style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 <span

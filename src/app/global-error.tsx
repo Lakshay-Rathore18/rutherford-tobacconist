@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 /**
@@ -117,7 +118,7 @@ export default function GlobalError({
               >
                 Try again
               </button>
-              <a
+              <Link
                 href="/"
                 style={{
                   minHeight: "44px",
@@ -131,7 +132,7 @@ export default function GlobalError({
                 }}
               >
                 Back to the counter
-              </a>
+              </Link>
               <a
                 href="tel:+61485040007"
                 aria-label="Call Rutherford Tobacconist on + 6 1 4 8 5 0 4 0 0 0 7"

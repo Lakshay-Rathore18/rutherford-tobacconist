@@ -1,10 +1,11 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
+import { use, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import type { OrderAudit } from "@/types";
-import { getOrder, formatPriceUSD, readableOrderId } from "@/lib/orders";
+import { ORDERS_KEY, formatPriceUSD, readableOrderId } from "@/lib/orders";
 import { BrassDivider } from "@/components/primitives/brass-divider";
+import { useIsClient, useLocalStorageRaw } from "@/lib/hooks";
 
 export default function OrderConfirmationPage({
   params,
@@ -12,15 +13,18 @@ export default function OrderConfirmationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const [order, setOrder] = useState<OrderAudit | null>(null);
-  const [loaded, setLoaded] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    const o = getOrder(id);
-    setOrder(o);
-    setLoaded(true);
-  }, [id]);
+  const ordersRaw = useLocalStorageRaw(ORDERS_KEY);
+  const loaded = useIsClient();
+  const order = useMemo<OrderAudit | null>(() => {
+    if (!ordersRaw) return null;
+    try {
+      const list = JSON.parse(ordersRaw) as OrderAudit[];
+      return list.find((o) => o.orderId === id) ?? null;
+    } catch {
+      return null;
+    }
+  }, [ordersRaw, id]);
 
   // Focus the H1 once it has actually mounted (loaded && order rendered the heading).
   useEffect(() => {

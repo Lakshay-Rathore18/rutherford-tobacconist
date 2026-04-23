@@ -19,12 +19,19 @@ export function LenisProvider() {
     if (typeof gsap === "undefined") return;
     gsap.registerPlugin(ScrollTrigger);
 
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Touch devices use native scroll. Lenis on mobile fights iOS Safari's
+    // momentum/bounce scroll and breaks pinned ScrollTrigger sections,
+    // producing the "blank scroll" bug users see on phones. Desktop/trackpad
+    // (pointer: fine) keeps the buttery wheel smoothing.
+    const reducedMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const fineMq = window.matchMedia("(pointer: fine)");
     let lenis: Lenis | null = null;
-    let raf = 0;
+    let rafTickerFn: ((time: number) => void) | null = null;
+
+    const shouldMount = () => fineMq.matches && !reducedMq.matches;
 
     const mount = () => {
-      if (mq.matches) return;
+      if (!shouldMount()) return;
       lenis = new Lenis({
         duration: 1.1,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -35,19 +42,25 @@ export function LenisProvider() {
 
       // Sync GSAP ScrollTrigger on every Lenis frame
       lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => {
+      rafTickerFn = (time: number) => {
         lenis?.raf(time * 1000);
-      });
+      };
+      gsap.ticker.add(rafTickerFn);
       gsap.ticker.lagSmoothing(0);
     };
 
     const unmount = () => {
+      if (rafTickerFn) {
+        gsap.ticker.remove(rafTickerFn);
+        rafTickerFn = null;
+      }
       if (lenis) {
         (window as unknown as { __rt_lenis?: Lenis }).__rt_lenis = undefined;
         lenis.destroy();
         lenis = null;
       }
-      if (raf) cancelAnimationFrame(raf);
+      // Re-enable native scroll restoration after Lenis tears down
+      ScrollTrigger.refresh();
     };
 
     mount();
@@ -55,10 +68,12 @@ export function LenisProvider() {
       unmount();
       mount();
     };
-    mq.addEventListener("change", onChange);
+    reducedMq.addEventListener("change", onChange);
+    fineMq.addEventListener("change", onChange);
 
     return () => {
-      mq.removeEventListener("change", onChange);
+      reducedMq.removeEventListener("change", onChange);
+      fineMq.removeEventListener("change", onChange);
       unmount();
     };
   }, []);

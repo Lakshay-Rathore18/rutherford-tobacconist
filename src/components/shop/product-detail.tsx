@@ -219,7 +219,7 @@ export function ProductDetail({
               >
                 {qty}
               </span>
-              <span className="sr-only">Current quantity {qty}.</span>
+              <span className="sr-only">{qty}.</span>
               <button
                 type="button"
                 onClick={() => setQty((q) => q + 1)}
