@@ -9,6 +9,7 @@ import { CraftStory } from "@/components/home/craft-story";
 import { DriftGallery } from "@/components/home/drift-gallery";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { CallToOrder } from "@/components/home/call-to-order";
+import { SectionBoundary } from "@/components/primitives/section-boundary";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
   faqSchema,
@@ -47,16 +48,16 @@ export default function Home() {
         data={breadcrumbSchema([{ name: "Home", path: "/" }])}
       />
 
-      <HeroVideo />
-      <HeritageSection />
-      <ScrollScene />
-      <TastingMarquee />
-      <CategoryShowcase />
-      <TonightsPick />
-      <CraftStory />
-      <DriftGallery />
-      <HowItWorks />
-      <CallToOrder />
+      <SectionBoundary name="hero"><HeroVideo /></SectionBoundary>
+      <SectionBoundary name="heritage"><HeritageSection /></SectionBoundary>
+      <SectionBoundary name="scroll-scene"><ScrollScene /></SectionBoundary>
+      <SectionBoundary name="tasting"><TastingMarquee /></SectionBoundary>
+      <SectionBoundary name="categories"><CategoryShowcase /></SectionBoundary>
+      <SectionBoundary name="tonights-pick"><TonightsPick /></SectionBoundary>
+      <SectionBoundary name="craft"><CraftStory /></SectionBoundary>
+      <SectionBoundary name="drift"><DriftGallery /></SectionBoundary>
+      <SectionBoundary name="how-it-works"><HowItWorks /></SectionBoundary>
+      <SectionBoundary name="call-to-order"><CallToOrder /></SectionBoundary>
     </>
   );
 }

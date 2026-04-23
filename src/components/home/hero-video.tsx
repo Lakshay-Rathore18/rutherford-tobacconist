@@ -74,8 +74,14 @@ export function HeroVideo() {
       {/* Layer 0 — base oak gradient */}
       <div className="absolute inset-0 hero-bg-fallback" />
 
-      {/* Layer 0b — Pexels cinematic whisky pour (muted, looped, decorative).
-          Sits under the smoke so the shader blends over the footage. */}
+      {/* Layer 0b — cinematic background loop (muted, decorative).
+          mix-blend-luminosity is broken on iOS Safari for video — switched to
+          mix-blend-screen which composites correctly on every mobile browser.
+          motion-reduce:hidden was hiding the loop on every iPhone with Reduce
+          Motion on (default in Low Power Mode); the loop is soft enough at
+          opacity 0.4 that it doesn't trigger motion sensitivity, so we keep
+          it visible. preload="auto" starts buffering before hydration so
+          playback is instant on first paint. */}
       <video
         aria-hidden="true"
         tabIndex={-1}
@@ -83,8 +89,10 @@ export function HeroVideo() {
         muted
         loop
         playsInline
+        preload="auto"
+        disablePictureInPicture
         poster="/images/texture/hero-poster.jpg"
-        className="absolute inset-0 w-full h-full object-cover opacity-45 mix-blend-luminosity motion-reduce:hidden"
+        className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-screen"
       >
         <source src="/video/hero-loop.mp4" type="video/mp4" />
       </video>
