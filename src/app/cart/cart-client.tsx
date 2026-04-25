@@ -11,6 +11,8 @@ export function CartClient() {
   const itemsTotal = useCart((s) => s.subtotalUSD());
   const bulkDiscount = useCart((s) => s.bulkDiscountUSD());
   const subtotal = useCart((s) => s.discountedSubtotalUSD());
+  const belowMin = useCart((s) => s.belowCigaretteMinimum());
+  const shortfall = useCart((s) => s.cigaretteShortfall());
   const count = items.reduce((sum, it) => sum + it.qty, 0);
 
   return (
@@ -83,13 +85,35 @@ export function CartClient() {
                 Cash on delivery. Driver confirms by phone.
               </p>
             </div>
-            <Link
-              href="/checkout"
-              className="inline-flex items-center justify-center bg-[var(--color-brass)] hover:bg-[var(--color-brass-highlight)] text-[var(--color-oak-deep)] font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.28em] text-xs px-9 py-4 transition-all duration-300 hover:tracking-[0.34em]"
-            >
-              Proceed to checkout
-            </Link>
+            {belowMin ? (
+              <Link
+                href="/cigarettes"
+                className="inline-flex items-center justify-center border border-[var(--color-brass)]/40 hover:border-[var(--color-brass-highlight)] text-[var(--color-parchment)] font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.28em] text-xs px-9 py-4"
+              >
+                Browse cigarettes
+              </Link>
+            ) : (
+              <Link
+                href="/checkout"
+                className="inline-flex items-center justify-center bg-[var(--color-brass)] hover:bg-[var(--color-brass-highlight)] text-[var(--color-oak-deep)] font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.28em] text-xs px-9 py-4 transition-all duration-300 hover:tracking-[0.34em]"
+              >
+                Proceed to checkout
+              </Link>
+            )}
           </div>
+          {belowMin && (
+            <div
+              role="status"
+              aria-live="polite"
+              className="mt-6 border border-[var(--color-oxblood)]/45 bg-[var(--color-oxblood)]/10 px-5 py-4 font-[family-name:var(--font-cormorant)] italic text-[var(--color-parchment)]"
+            >
+              Cigarettes ship in pairs. Add{" "}
+              <span className="font-[family-name:var(--font-libre-caslon)] not-italic uppercase tracking-[0.18em] text-[0.78em] text-[var(--color-brass-highlight)]">
+                {shortfall} more pack{shortfall === 1 ? "" : "s"}
+              </span>{" "}
+              — any brand counts toward the minimum of 2.
+            </div>
+          )}
         </>
       )}
     </div>

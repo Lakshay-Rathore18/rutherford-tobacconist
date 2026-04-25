@@ -24,6 +24,8 @@ export function CheckoutForm() {
   const itemsTotal = useCart((s) => s.subtotalUSD());
   const bulkDiscount = useCart((s) => s.bulkDiscountUSD());
   const subtotal = useCart((s) => s.discountedSubtotalUSD());
+  const belowCigaretteMin = useCart((s) => s.belowCigaretteMinimum());
+  const cigaretteShort = useCart((s) => s.cigaretteShortfall());
   const clear = useCart((s) => s.clear);
 
   const summaryRef = useRef<HTMLDivElement>(null);
@@ -46,6 +48,12 @@ export function CheckoutForm() {
 
   function validate(): FieldError[] {
     const errs: FieldError[] = [];
+    if (belowCigaretteMin) {
+      errs.push({
+        field: "cart",
+        message: `Cigarettes ship in pairs. Add ${cigaretteShort} more pack${cigaretteShort === 1 ? "" : "s"} (any brand) before checking out.`,
+      });
+    }
     if (!phone.trim() || phone.replace(/\D/g, "").length < 7)
       errs.push({ field: "phone", message: "A valid phone number is required." });
     if (!firstName.trim()) errs.push({ field: "first-name", message: "First name is required." });

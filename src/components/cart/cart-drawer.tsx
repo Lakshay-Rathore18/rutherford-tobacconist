@@ -14,6 +14,8 @@ export function CartDrawer() {
   const itemsTotal = useCart((s) => s.subtotalUSD());
   const bulkDiscount = useCart((s) => s.bulkDiscountUSD());
   const subtotal = useCart((s) => s.discountedSubtotalUSD());
+  const belowMin = useCart((s) => s.belowCigaretteMinimum());
+  const shortfall = useCart((s) => s.cigaretteShortfall());
   const count = items.reduce((sum, it) => sum + it.qty, 0);
 
   return (
@@ -91,14 +93,37 @@ export function CartDrawer() {
               <p className="font-[family-name:var(--font-cormorant)] italic text-sm text-[var(--color-parchment-deep)]">
                 Cash on delivery. Your driver will confirm by phone.
               </p>
+              {belowMin && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="border border-[var(--color-oxblood)]/45 bg-[var(--color-oxblood)]/10 px-4 py-3 text-sm font-[family-name:var(--font-cormorant)] italic text-[var(--color-parchment)]"
+                >
+                  Cigarettes ship in pairs. Add{" "}
+                  <span className="font-[family-name:var(--font-libre-caslon)] not-italic uppercase tracking-[0.18em] text-[0.78em] text-[var(--color-brass-highlight)]">
+                    {shortfall} more pack{shortfall === 1 ? "" : "s"}
+                  </span>{" "}
+                  — any brand counts toward the minimum of 2.
+                </div>
+              )}
               <BrassDivider className="opacity-40" />
-              <Link
-                href="/checkout"
-                onClick={close}
-                className="block w-full text-center bg-[var(--color-brass)] hover:bg-[var(--color-brass-highlight)] text-[var(--color-oak-deep)] font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.22em] text-sm py-3.5 transition-colors duration-200"
-              >
-                Proceed to checkout
-              </Link>
+              {belowMin ? (
+                <Link
+                  href="/cigarettes"
+                  onClick={close}
+                  className="block w-full text-center border border-[var(--color-brass)]/40 hover:border-[var(--color-brass-highlight)] text-[var(--color-parchment)] font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.22em] text-sm py-3.5 transition-colors duration-200"
+                >
+                  Browse cigarettes
+                </Link>
+              ) : (
+                <Link
+                  href="/checkout"
+                  onClick={close}
+                  className="block w-full text-center bg-[var(--color-brass)] hover:bg-[var(--color-brass-highlight)] text-[var(--color-oak-deep)] font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.22em] text-sm py-3.5 transition-colors duration-200"
+                >
+                  Proceed to checkout
+                </Link>
+              )}
             </div>
           </>
         )}

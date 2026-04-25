@@ -3,7 +3,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem } from "@/types";
-import { minQtyFor, bulkDiscountForPacks } from "@/lib/products";
+import {
+  minQtyFor,
+  bulkDiscountForPacks,
+  MIN_CIGARETTE_PACKS_TOTAL,
+} from "@/lib/products";
 
 type LineKey = {
   productId: string;
@@ -35,6 +39,14 @@ type CartStore = {
   bulkDiscountUSD: () => number;
   /** subtotalUSD - bulkDiscountUSD, floored at 0. */
   discountedSubtotalUSD: () => number;
+  /**
+   * True when the cart has cigarettes but the total pack count is below
+   * MIN_CIGARETTE_PACKS_TOTAL. Use this to gate the checkout submit and
+   * show a clear remediation prompt.
+   */
+  belowCigaretteMinimum: () => boolean;
+  /** Number of additional cigarette packs needed to reach the cart minimum. */
+  cigaretteShortfall: () => number;
 };
 
 const sameLine = (a: CartItem, key: LineKey) =>
@@ -111,6 +123,15 @@ export const useCart = create<CartStore>()(
       bulkDiscountUSD: () => bulkDiscountForPacks(get().cigarettePackCount()),
       discountedSubtotalUSD: () =>
         Math.max(0, get().subtotalUSD() - get().bulkDiscountUSD()),
+      belowCigaretteMinimum: () => {
+        const c = get().cigarettePackCount();
+        return c > 0 && c < MIN_CIGARETTE_PACKS_TOTAL;
+      },
+      cigaretteShortfall: () => {
+        const c = get().cigarettePackCount();
+        if (c === 0) return 0;
+        return Math.max(0, MIN_CIGARETTE_PACKS_TOTAL - c);
+      },
     }),
     {
       name: "rt_cart",

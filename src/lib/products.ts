@@ -522,13 +522,13 @@ export function getRelatedProducts(slug: string, limit = 3): Product[] {
 
 /**
  * Minimum quantity per cart line, by category.
- * Founder-locked: cigarettes ship in pairs (trade norm); vapes, nicotine
- * pouches, and tobacco pouches can ship as singletons. Helper is also
- * exported so the cart store, product card, product detail, and any
- * future admin tools all read from one source.
+ * Founder rule: every line ships solo OK — but the cigarette CART TOTAL
+ * across all lines must reach MIN_CIGARETTE_PACKS_TOTAL before the order
+ * can be placed (any combination of brands counts toward the threshold).
+ * Vapes, nicotine pouches, and tobacco pouches have no cart-level minimum.
  */
-export function minQtyFor(category: Category): number {
-  return category === "cigarettes" ? 2 : 1;
+export function minQtyFor(_category: Category): number {
+  return 1;
 }
 
 /** Convenience wrapper for product-aware code paths. */
@@ -536,9 +536,18 @@ export function minQtyForProduct(product: Pick<Product, "category">): number {
   return minQtyFor(product.category);
 }
 
-/** Human-readable rule blurb for product detail / card "Sold in pairs." */
+/**
+ * Cart-level cigarette minimum: any combination of cigarette brands totalling
+ * fewer than this number cannot check out. Encodes the founder's rule: at
+ * least 2 packs of cigarettes per delivery (mix-and-match across brands OK).
+ */
+export const MIN_CIGARETTE_PACKS_TOTAL = 2;
+
+/** Human-readable rule blurb for product detail / card. */
 export function minQtyLabel(category: Category): string | null {
-  return category === "cigarettes" ? "Sold in pairs — minimum 2 per order." : null;
+  return category === "cigarettes"
+    ? `At least ${MIN_CIGARETTE_PACKS_TOTAL} cigarette packs per order — any mix of brands.`
+    : null;
 }
 
 /* ─────────────────────────── BULK DISCOUNT (cigarettes) ─────────────────────────── */
