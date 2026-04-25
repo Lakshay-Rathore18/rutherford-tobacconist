@@ -3,27 +3,30 @@
 import { useState } from "react";
 import { BrassDivider } from "@/components/primitives/brass-divider";
 
+// Real cabinet stock — pulled from the actual catalogue (cigarettes,
+// vapes, nicotine pouches, rolling tobacco). Mixed brands and flavours so
+// the marquee reads like a quick scan of the shelves, not a sommelier card.
 const NOTES = [
-  "Cedar",
-  "Old leather",
-  "Dried fig",
-  "Honeyed hay",
-  "Black tea",
-  "Espresso",
-  "White Burley",
-  "Bright Virginia",
-  "Charred oak",
-  "Cool mint",
-  "Latakia",
-  "Vanilla bean",
-  "Toasted nut",
-  "Sea spray",
-  "Cocoa nib",
-  "Pipe tobacco",
+  "Marlboro Red",
+  "Black Forest",
+  "Cool Mint",
+  "Manchester Original",
+  "Tropical Orange",
+  "Winfield Classic",
+  "Watermelon Ice",
+  "Bullubul Quad Berry",
+  "ZYN Spearmint",
+  "JPS",
+  "Mango Ice",
+  "Ali Bar",
+  "Lush Ice",
+  "Double Happiness",
+  "Banana Ice",
+  "I Get One",
 ];
 
 /**
- * Decorative tasting-notes marquee.
+ * Decorative cabinet-stock marquee.
  *
  * a11y plan (from accessibility-lead pre-review):
  *   1. Visible Pause/Play button (satisfies WCAG 2.2.2 unambiguously)
@@ -51,14 +54,14 @@ export function TastingMarquee() {
               id="marquee-title"
               className="mt-2 font-[family-name:var(--font-cinzel)] text-2xl md:text-3xl tracking-[0.04em] text-[var(--color-parchment)]"
             >
-              Tasting notes drifting through the cabinet
+              Drifting through the cabinet
             </h2>
           </div>
           <button
             type="button"
             onClick={() => setPaused((v) => !v)}
             aria-pressed={paused}
-            aria-label={paused ? "Play tasting notes" : "Pause tasting notes"}
+            aria-label={paused ? "Play cabinet marquee" : "Pause cabinet marquee"}
             className="self-start sm:self-end inline-flex items-center gap-2 font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.22em] text-xs text-[var(--color-brass-highlight)] border border-[var(--color-brass)]/40 hover:border-[var(--color-brass-highlight)] hover:bg-[var(--color-brass)]/5 px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-brass-highlight)] focus:ring-offset-2 focus:ring-offset-[var(--color-oak-deep)]"
           >
             <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
@@ -78,7 +81,11 @@ export function TastingMarquee() {
         <BrassDivider className="opacity-40 mb-8" />
 
         {/* SR-only static list — what screen reader users actually consume */}
-        <div className="sr-only" role="region" aria-label="Tasting notes available across the catalogue">
+        <div
+          className="sr-only"
+          role="region"
+          aria-label="A sample of brands and flavours currently in the cabinet"
+        >
           <ul>
             {NOTES.map((n) => (
               <li key={n}>{n}</li>
