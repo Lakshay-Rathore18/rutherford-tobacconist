@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ProductMark } from "@/components/primitives/product-mark";
 import { PRODUCTS } from "@/lib/products";
 import { BrassDivider } from "@/components/primitives/brass-divider";
+import { AmbientBackdrop } from "@/components/ambient/ambient-backdrop";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -102,8 +103,14 @@ export function DriftGallery() {
       aria-labelledby="drift-title"
       className="relative py-24 md:py-36 overflow-hidden bg-[var(--color-ink)]/30"
     >
-      <BrassDivider className="opacity-50" />
-      <div className="container mx-auto max-w-7xl px-6 pt-16">
+      {/* Ambient — warm bar-counter glow behind the gallery tiles. */}
+      <AmbientBackdrop
+        src="/video/ambient/whiskey-bar.mp4"
+        opacity={0.14}
+        blend="screen"
+      />
+      <BrassDivider className="opacity-50 relative" />
+      <div className="container mx-auto max-w-7xl px-6 pt-16 relative">
         <div className="text-center mb-14">
           <p className="font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.45em] text-[0.78rem] text-[var(--color-brass-highlight)]">
             Drift

@@ -1,10 +1,20 @@
 import { BrassDivider } from "@/components/primitives/brass-divider";
 import { MotionReveal } from "@/components/primitives/motion-reveal";
+import { AmbientBackdrop } from "@/components/ambient/ambient-backdrop";
 
 export function CraftStory() {
   return (
-    <section aria-labelledby="craft-title" className="relative py-28 md:py-40">
-      <div className="container mx-auto max-w-5xl px-6">
+    <section
+      aria-labelledby="craft-title"
+      className="relative py-28 md:py-40 overflow-hidden"
+    >
+      {/* Ambient — late-night counter glow behind the prose. Subtle. */}
+      <AmbientBackdrop
+        src="/video/ambient/cigar-night.mp4"
+        opacity={0.18}
+        blend="screen"
+      />
+      <div className="container mx-auto max-w-5xl px-6 relative">
         <MotionReveal className="text-center mb-14">
           <p className="font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.4em] text-[0.78rem] text-[var(--color-brass-highlight)]">
             Of the trade

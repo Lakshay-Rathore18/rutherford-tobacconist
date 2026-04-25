@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { BrassDivider } from "@/components/primitives/brass-divider";
 import { MotionReveal } from "@/components/primitives/motion-reveal";
+import { AmbientBackdrop } from "@/components/ambient/ambient-backdrop";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -66,6 +67,13 @@ export function HeritageSection() {
       aria-labelledby="heritage-title"
       className="relative py-28 md:py-36 overflow-hidden"
     >
+      {/* Ambient layer — slow drifting smoke behind the counter card.
+          Decorative, opacity-clamped so headings stay legible. */}
+      <AmbientBackdrop
+        src="/video/ambient/smoke-overlay.mp4"
+        opacity={0.16}
+        blend="screen"
+      />
       <div className="container mx-auto max-w-6xl px-6">
         <div className="grid md:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
           <MotionReveal className="relative">

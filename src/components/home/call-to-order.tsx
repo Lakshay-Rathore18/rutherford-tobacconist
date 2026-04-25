@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { BRAND } from "@/lib/brand";
 import { BrassDivider } from "@/components/primitives/brass-divider";
 import { Magnetic } from "@/components/ambient/magnetic";
+import { AmbientBackdrop } from "@/components/ambient/ambient-backdrop";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -82,6 +83,15 @@ export function CallToOrder() {
       aria-labelledby="call-to-order-title"
       className="relative py-32 md:py-44 overflow-hidden bg-[var(--color-bg-primary)] ember-pulses"
     >
+      {/* Ambient — slow elegant pour behind the call-to-order. The motion
+          mirrors the act of pouring an order out to the customer. Decorative,
+          opacity-clamped so the orbit + phone number stay sovereign. */}
+      <AmbientBackdrop
+        src="/video/ambient/whiskey-pour.mp4"
+        opacity={0.12}
+        blend="screen"
+      />
+
       {/* Decorative orbit + brass glow */}
       <svg
         ref={orbitRef}
