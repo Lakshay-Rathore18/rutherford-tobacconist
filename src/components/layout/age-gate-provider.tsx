@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { AgeGateModal } from "./age-gate-modal";
 import {
   STORAGE_KEY,
@@ -30,6 +30,26 @@ export function AgeGateProvider({ children }: { children: React.ReactNode }) {
       return false;
     }
   }, [raw]);
+
+  // Return focus to <main> when the gate transitions from blocking to verified.
+  // Without this, focus is lost to <body> and keyboard users have to re-Tab
+  // from scratch into the page.
+  const wasBlocking = useRef(false);
+  useEffect(() => {
+    if (!isClient) return;
+    if (!verified && !wasBlocking.current) {
+      wasBlocking.current = true;
+      return;
+    }
+    if (verified && wasBlocking.current) {
+      wasBlocking.current = false;
+      const main = document.getElementById("main");
+      if (main) {
+        // Use rAF so the modal's exit animation/portal-unmount completes first.
+        requestAnimationFrame(() => main.focus());
+      }
+    }
+  }, [verified, isClient]);
 
   // Don't SSR-render the modal — preserves the original "modal only mounts
   // post-hydration" behavior so search engines and the SSR'd HTML stay clean.

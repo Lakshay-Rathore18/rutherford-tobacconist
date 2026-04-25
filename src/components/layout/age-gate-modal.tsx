@@ -32,22 +32,13 @@ export function AgeGateModal({ onVerified }: { onVerified: () => void }) {
   const [year, setYear] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // Hard block Escape at the document level. The dialog is intentionally
-  // non-dismissible — base-ui's `dismissible` prop isn't exposed through the
-  // shadcn wrapper type, so this capture-phase listener is the safety net.
+  // Freeze body scroll while the gate is up. Escape blocking is now handled
+  // by base-ui's `dismissible={false}` on the Dialog Root (no more global
+  // capture-phase listener that hijacked Escape across the whole document).
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-    document.addEventListener("keydown", onKeyDown, true);
-    // Also freeze body scroll while the gate is up.
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      document.removeEventListener("keydown", onKeyDown, true);
       document.body.style.overflow = prevOverflow;
     };
   }, []);
@@ -92,23 +83,23 @@ export function AgeGateModal({ onVerified }: { onVerified: () => void }) {
   return (
     <Dialog open onOpenChange={() => {}}>
       <DialogContent
-        className="max-w-lg border border-[var(--color-brass)]/40 bg-[var(--color-oak-medium)] text-[var(--color-parchment)] p-0 gap-0 shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
+        className="w-[92vw] max-w-[92vw] sm:w-full sm:max-w-lg border border-[var(--color-brass)]/40 bg-[var(--color-oak-medium)] text-[var(--color-parchment)] p-0 gap-0 shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
         showCloseButton={false}
         aria-describedby="age-gate-desc"
         initialFocus={phase === "form" ? monthRef : undefined}
       >
-        <div className="px-8 pt-8 pb-2 text-center">
-          <p className="font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.4em] text-[0.7rem] text-[var(--color-brass-highlight)] mb-3">
+        <div className="px-6 sm:px-8 pt-7 sm:pt-8 pb-2 text-center">
+          <p className="font-[family-name:var(--font-libre-caslon)] uppercase tracking-[0.32em] text-[0.65rem] sm:tracking-[0.4em] sm:text-[0.7rem] text-[var(--color-brass-highlight)] mb-3 break-words">
             {BRAND.name}
           </p>
           <BrassDivider className="mx-auto max-w-[140px]" />
         </div>
 
         {phase === "form" ? (
-          <form onSubmit={handleSubmit} noValidate className="px-8 pb-8 pt-4 space-y-6">
+          <form onSubmit={handleSubmit} noValidate className="px-6 sm:px-8 pb-7 sm:pb-8 pt-4 space-y-6">
             <div className="text-center space-y-3">
               <DialogTitle
-                className="font-[family-name:var(--font-cinzel)] text-3xl tracking-[0.06em]"
+                className="font-[family-name:var(--font-cinzel)] text-2xl sm:text-3xl tracking-[0.04em] sm:tracking-[0.06em]"
                 id="age-gate-title"
               >
                 Verify your age
