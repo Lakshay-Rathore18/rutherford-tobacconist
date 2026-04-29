@@ -62,27 +62,41 @@ export type Database = {
         Relationships: []
       }
       delivery_agents: {
+        Row: Record<string, unknown>
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
+      }
+      notification_campaigns: {
+        Row: Record<string, unknown>
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
+      }
+      notification_recipients: {
         Row: {
-          active: boolean | null
-          created_at: string | null
+          created_at: string
+          customer_id: string | null
+          display_name: string | null
           id: string
-          name: string
+          last_contacted_at: string | null
+          notes: string | null
+          opted_in: boolean
+          opted_out_at: string | null
           phone: string
+          source: string
+          total_calls_made: number
+          total_sms_sent: number
+          updated_at: string
         }
-        Insert: {
-          active?: boolean | null
-          created_at?: string | null
-          id?: string
-          name: string
-          phone: string
-        }
-        Update: {
-          active?: boolean | null
-          created_at?: string | null
-          id?: string
-          name?: string
-          phone?: string
-        }
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
+      }
+      notification_sends: {
+        Row: Record<string, unknown>
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
         Relationships: []
       }
       order_items: {
@@ -96,42 +110,9 @@ export type Database = {
           quantity: number
           unit_price: number
         }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          line_total: number
-          order_id?: string | null
-          product_id?: string | null
-          product_name: string
-          quantity?: number
-          unit_price: number
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          line_total?: number
-          order_id?: string | null
-          product_id?: string | null
-          product_name?: string
-          quantity?: number
-          unit_price?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "order_items_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "order_items_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
       }
       orders: {
         Row: {
@@ -147,69 +128,22 @@ export type Database = {
           notes: string | null
           sms_sent: boolean | null
           sms_sent_at: string | null
-          source: Database["public"]["Enums"]["order_source"] | null
-          status: Database["public"]["Enums"]["order_status"] | null
+          source: string | null
+          status: string | null
           subtotal: number
           total_price: number
           updated_at: string | null
           vapi_call_id: string | null
         }
-        Insert: {
-          assigned_agent_id?: string | null
-          confirmation_number: string
-          created_at?: string | null
-          customer_id?: string | null
-          customer_name: string
-          customer_phone: string
-          delivery_address: string
-          discount?: number
-          id?: string
-          notes?: string | null
-          sms_sent?: boolean | null
-          sms_sent_at?: string | null
-          source?: Database["public"]["Enums"]["order_source"] | null
-          status?: Database["public"]["Enums"]["order_status"] | null
-          subtotal?: number
-          total_price: number
-          updated_at?: string | null
-          vapi_call_id?: string | null
-        }
-        Update: {
-          assigned_agent_id?: string | null
-          confirmation_number?: string
-          created_at?: string | null
-          customer_id?: string | null
-          customer_name?: string
-          customer_phone?: string
-          delivery_address?: string
-          discount?: number
-          id?: string
-          notes?: string | null
-          sms_sent?: boolean | null
-          sms_sent_at?: string | null
-          source?: Database["public"]["Enums"]["order_source"] | null
-          status?: Database["public"]["Enums"]["order_status"] | null
-          subtotal?: number
-          total_price?: number
-          updated_at?: string | null
-          vapi_call_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "orders_assigned_agent_id_fkey"
-            columns: ["assigned_agent_id"]
-            isOneToOne: false
-            referencedRelation: "delivery_agents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "orders_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
-          },
-        ]
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
+      }
+      partner_shops: {
+        Row: Record<string, unknown>
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
       }
       product_categories: {
         Row: {
@@ -219,20 +153,8 @@ export type Database = {
           name: string
           slug: string
         }
-        Insert: {
-          created_at?: string | null
-          discount_eligible?: boolean | null
-          id?: string
-          name: string
-          slug: string
-        }
-        Update: {
-          created_at?: string | null
-          discount_eligible?: boolean | null
-          id?: string
-          name?: string
-          slug?: string
-        }
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
         Relationships: []
       }
       products: {
@@ -250,153 +172,81 @@ export type Database = {
           updated_at: string | null
           variant: string | null
         }
-        Insert: {
-          active?: boolean | null
-          brand: string
-          category_id?: string | null
-          created_at?: string | null
-          id?: string
-          min_order_qty?: number
-          name: string
-          price: number
-          sku?: string | null
-          stock?: number
-          updated_at?: string | null
-          variant?: string | null
-        }
-        Update: {
-          active?: boolean | null
-          brand?: string
-          category_id?: string | null
-          created_at?: string | null
-          id?: string
-          min_order_qty?: number
-          name?: string
-          price?: number
-          sku?: string | null
-          stock?: number
-          updated_at?: string | null
-          variant?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "products_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "product_categories"
-            referencedColumns: ["id"]
-          },
-        ]
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
       }
       stock_movements: {
-        Row: {
-          change: number
-          created_at: string | null
-          id: string
-          product_id: string | null
-          reason: string | null
-          reference_id: string | null
-        }
-        Insert: {
-          change: number
-          created_at?: string | null
-          id?: string
-          product_id?: string | null
-          reason?: string | null
-          reference_id?: string | null
-        }
-        Update: {
-          change?: number
-          created_at?: string | null
-          id?: string
-          product_id?: string | null
-          reason?: string | null
-          reference_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "stock_movements_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
+        Row: Record<string, unknown>
+        Insert: Record<string, unknown>
+        Update: Record<string, unknown>
+        Relationships: []
       }
     }
     Views: {
-      v_low_stock: {
-        Row: {
-          brand: string | null
-          id: string | null
-          name: string | null
-          price: number | null
-          stock: number | null
-          variant: string | null
-        }
-        Relationships: []
-      }
-      v_order_summary: {
-        Row: {
-          agent_name: string | null
-          agent_phone: string | null
-          confirmation_number: string | null
-          created_at: string | null
-          customer_name: string | null
-          customer_phone: string | null
-          delivery_address: string | null
-          discount: number | null
-          id: string | null
-          items: Json | null
-          sms_sent: boolean | null
-          source: string | null
-          status: string | null
-          subtotal: number | null
-          total_price: number | null
-        }
-        Relationships: []
-      }
-      v_top_customers: {
-        Row: {
-          last_order_at: string | null
-          lifetime_packs_bought: number | null
-          name: string | null
-          phone: string | null
-          total_orders: number | null
-          total_spend: number | null
-        }
+      [view: string]: {
+        Row: Record<string, unknown>
         Relationships: []
       }
     }
     Functions: {
-      generate_confirmation_number: { Args: never; Returns: string }
+      assign_driver_to_order: { Args: { p_driver_id: string; p_order_id: string }; Returns: Json }
+      complete_delivery: { Args: { p_distance_km?: number; p_order_id: string; p_was_successful?: boolean }; Returns: Json }
+      decrement_product_stock: { Args: { p_name: string; p_qty: number }; Returns: Json }
+      end_shift: { Args: { p_driver_id: string }; Returns: Json }
+      generate_confirmation_number: { Args: Record<string, never>; Returns: string }
+      get_available_drivers: { Args: { p_limit?: number; p_zone?: string }; Returns: unknown[] }
+      get_campaign_queue: { Args: { p_campaign_id: string; p_channel: string; p_limit?: number }; Returns: unknown[] }
       get_customer_context: { Args: { p_phone: string }; Returns: Json }
-      place_order: {
-        Args: {
-          p_customer_name: string
-          p_customer_phone: string
-          p_delivery_address: string
-          p_items: Json
-          p_source?: string
-          p_vapi_call_id?: string
-        }
-        Returns: Json
-      }
-      search_products: {
-        Args: { search_query: string }
-        Returns: {
-          brand: string
-          category: string
-          id: string
-          in_stock: boolean
-          name: string
-          price: number
-          stock: number
-          variant: string
-        }[]
-      }
+      mark_notification_send: { Args: { p_error_text?: string; p_provider_id?: string; p_send_id: string; p_status: string }; Returns: undefined }
+      notification_campaign_summary: { Args: { p_campaign_id: string }; Returns: Json }
+      opt_out_recipient: { Args: { p_phone: string }; Returns: boolean }
+      place_order: { Args: { p_customer_name: string; p_customer_phone: string; p_delivery_address: string; p_items: Json; p_source?: string; p_vapi_call_id?: string }; Returns: Json }
+      place_order_from_voice_payload: { Args: { order_record: Json }; Returns: Json }
+      register_walkin_customer: { Args: { p_first_name: string; p_last_name: string; p_phone: string; p_source?: string }; Returns: Json }
+      resolve_order_items: { Args: { p_items: Json }; Returns: Json }
+      search_products: { Args: { search_query: string }; Returns: unknown[] }
+      show_limit: { Args: Record<string, never>; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
+      start_notification_campaign: { Args: { p_channel: string; p_name: string; p_partner_shop_id: string; p_recipient_ids?: string[]; p_sms_template: string; p_voice_brief?: string }; Returns: Json }
+      start_shift: { Args: { p_driver_id: string }; Returns: Json }
+      update_driver_location: { Args: { p_driver_id: string; p_lat: number; p_lng: number; p_zone?: string }; Returns: Json }
+      upsert_notification_recipients: { Args: { p_recipients: Json }; Returns: Json }
     }
     Enums: {
+      driver_role: "owner" | "employee" | "contractor" | "casual"
+      driver_shift_status:
+        | "offline"
+        | "available"
+        | "on_delivery"
+        | "on_break"
+        | "suspended"
+      driver_vehicle_type:
+        | "motorbike"
+        | "scooter"
+        | "ebike"
+        | "bicycle"
+        | "car"
+        | "van"
+        | "on_foot"
+      notification_campaign_status:
+        | "draft"
+        | "queued"
+        | "running"
+        | "completed"
+        | "cancelled"
+        | "failed"
+      notification_channel: "sms" | "call" | "both"
+      notification_send_status:
+        | "queued"
+        | "sent"
+        | "delivered"
+        | "failed"
+        | "no_answer"
+        | "voicemail"
+        | "answered"
+        | "opted_out"
+        | "sending"
       order_source: "voice" | "website" | "whatsapp" | "manual"
       order_status:
         | "pending"
@@ -406,22 +256,8 @@ export type Database = {
         | "delivered"
         | "cancelled"
     }
-    CompositeTypes: Record<string, never>
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
 }
-
-export const Constants = {
-  public: {
-    Enums: {
-      order_source: ["voice", "website", "whatsapp", "manual"],
-      order_status: [
-        "pending",
-        "confirmed",
-        "preparing",
-        "out_for_delivery",
-        "delivered",
-        "cancelled",
-      ],
-    },
-  },
-} as const
