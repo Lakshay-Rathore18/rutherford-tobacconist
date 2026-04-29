@@ -1,12 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { AgeGateModal } from "./age-gate-modal";
 import {
   STORAGE_KEY,
   type AgeVerificationRecord,
 } from "@/lib/age-verification";
 import { useLocalStorageRaw, useIsClient } from "@/lib/hooks";
+
+// Routes that bypass the global age gate. The walk-in QR sign-up has its own
+// in-form 18+ confirmation checkbox; layering the modal on top would block
+// the QR-scan-to-form flow entirely. The form still enforces age legally.
+const AGE_GATE_BYPASS_ROUTES = new Set(["/welcome"]);
 
 /**
  * Wraps the app and renders the age-gate modal until the visitor has verified.
@@ -17,6 +23,8 @@ import { useLocalStorageRaw, useIsClient } from "@/lib/hooks";
  * provider synchronously without onVerified callback round-trips.
  */
 export function AgeGateProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const bypassed = AGE_GATE_BYPASS_ROUTES.has(pathname ?? "");
   const raw = useLocalStorageRaw(STORAGE_KEY);
   const isClient = useIsClient();
   const verified = useMemo(() => {
@@ -59,7 +67,7 @@ export function AgeGateProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-      {isClient && !verified && <AgeGateModal onVerified={() => {}} />}
+      {isClient && !verified && !bypassed && <AgeGateModal onVerified={() => {}} />}
     </>
   );
 }
